@@ -16,7 +16,6 @@
       color: white;
       font-family: Arial, sans-serif;
       overflow: hidden;
-      touch-action: none;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -44,17 +43,24 @@
       margin-bottom: 5vh;
     }
 
-    #tap {
-      width: 40vw;
-      height: 40vw;
-      max-width: 250px;
-      max-height: 250px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, gold, orange);
-      font-size: 5vw;
-      border: none;
-      box-shadow: 0 0 40px orange;
-    }
+  #tap {
+  width: 60vw;
+  height: 60vw;
+  max-width: 300px;
+  max-height: 300px;
+  min-width: 220px;
+  min-height: 220px;
+
+  border-radius: 50%;
+  background: linear-gradient(135deg, gold, orange);
+  font-size: 6vw;
+  border: none;
+  box-shadow: 0 0 40px orange;
+  transition: transform 0.1s ease;
+  user-select: none;
+  touch-action: manipulation;
+}
+
   </style>
 </head>
 
