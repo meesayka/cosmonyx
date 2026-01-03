@@ -8,51 +8,85 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
-    body {
+    html, body {
       margin: 0;
-      height: 100vh;
+      padding: 0;
+      width: 100%;
+      height: 100%;
       background: #0f0f0f;
       color: white;
-      font-family: Arial;
+      font-family: Arial, sans-serif;
+      overflow: hidden; /* убираем прокрутку */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Контейнер фиксированного размера для игры */
+    #game-container {
+      width: 100%;
+      max-width: 400px;   /* фиксированная ширина контента */
+      height: 100%;
+      max-height: 600px;  /* фиксированная высота контента */
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      user-select: none;
+      box-sizing: border-box;
     }
 
     #counter {
-      font-size: 48px;
-      margin-bottom: 30px;
+      font-size: 8vw;      /* адаптивный размер текста */
+      margin-bottom: 5vh;
     }
 
     #tap {
-      width: 200px;
-      height: 200px;
+      width: 40vw;          /* адаптивный размер круга */
+      height: 40vw;
+      max-width: 250px;     /* ограничение по максимуму */
+      max-height: 250px;
       border-radius: 50%;
       background: linear-gradient(135deg, gold, orange);
-      font-size: 32px;
+      font-size: 5vw;
       border: none;
       cursor: pointer;
       box-shadow: 0 0 40px orange;
+      transition: transform 0.1s ease;
     }
 
     #tap:active {
-      transform: scale(0.95);
+      transform: scale(0.95); /* анимация нажатия */
     }
   </style>
 </head>
 <body>
 
-  <div id="counter">0</div>
-  <button id="tap">TAP</button>
+  <div id="game-container">
+    <div id="counter">0</div>
+    <button id="tap">TAP</button>
+  </div>
 
   <script>
     const tg = window.Telegram.WebApp;
-    tg.expand();
+
+    if (tg) {
+      tg.MainButton.hide(); // скрываем основную кнопку Telegram
+
+      // Фиксируем визуальные размеры игрового контейнера
+      const container = document.getElementById('game-container');
+      function adjustSize() {
+        const scaleX = window.innerWidth / container.offsetWidth;
+        const scaleY = window.innerHeight / container.offsetHeight;
+        const scale = Math.min(scaleX, scaleY);
+        container.style.transform = `scale(${scale})`;
+        container.style.transformOrigin = 'top left';
+      }
+
+      adjustSize(); // сразу при загрузке
+      window.addEventListener('resize', adjustSize); // при изменении экрана
+    }
 
     let taps = 0;
-
     document.getElementById("tap").onclick = () => {
       taps++;
       document.getElementById("counter").innerText = taps;
