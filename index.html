@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Tap App</title>
+
+  <!-- Telegram SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #0f0f0f;
+      color: white;
+      font-family: Arial;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+    }
+
+    #counter {
+      font-size: 48px;
+      margin-bottom: 30px;
+    }
+
+    #tap {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, gold, orange);
+      font-size: 32px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 40px orange;
+    }
+
+    #tap:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="counter">0</div>
+  <button id="tap">TAP</button>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    let taps = 0;
+
+    document.getElementById("tap").onclick = () => {
+      taps++;
+      document.getElementById("counter").innerText = taps;
+      tg.HapticFeedback.impactOccurred("light");
+    };
+  </script>
+
+</body>
+</html>
