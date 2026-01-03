@@ -16,34 +16,43 @@
       background: #0f0f0f;
       color: white;
       font-family: Arial, sans-serif;
-      overflow: hidden; /* убираем прокрутку */
+      overflow: hidden;        /* запрещаем прокрутку */
+      touch-action: none;      /* блокируем жесты свайпа */
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    /* Контейнер фиксированного размера для игры */
-    #game-container {
+    /* Внешний контейнер — центрируем контент */
+    #outer-container {
       width: 100%;
-      max-width: 400px;   /* фиксированная ширина контента */
       height: 100%;
-      max-height: 600px;  /* фиксированная высота контента */
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    /* Внутренний контейнер — фиксированный размер, масштабируемый */
+    #game-container {
+      width: 400px;
+      height: 600px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;  /* центр по вертикали */
+      align-items: center;      /* центр по горизонтали */
     }
 
     #counter {
       font-size: 8vw;      /* адаптивный размер текста */
       margin-bottom: 5vh;
+      user-select: none;
     }
 
     #tap {
       width: 40vw;          /* адаптивный размер круга */
       height: 40vw;
-      max-width: 250px;     /* ограничение по максимуму */
+      max-width: 250px;
       max-height: 250px;
       border-radius: 50%;
       background: linear-gradient(135deg, gold, orange);
@@ -52,28 +61,32 @@
       cursor: pointer;
       box-shadow: 0 0 40px orange;
       transition: transform 0.1s ease;
+      user-select: none;
     }
 
     #tap:active {
-      transform: scale(0.95); /* анимация нажатия */
+      transform: scale(0.95) translateY(-5px); /* легкая подпрыгивающая анимация */
     }
   </style>
 </head>
 <body>
 
-  <div id="game-container">
-    <div id="counter">0</div>
-    <button id="tap">TAP</button>
+  <div id="outer-container">
+    <div id="game-container">
+      <div id="counter">0</div>
+      <button id="tap">TAP</button>
+    </div>
   </div>
 
   <script>
     const tg = window.Telegram.WebApp;
 
     if (tg) {
-      tg.MainButton.hide(); // скрываем основную кнопку Telegram
+      tg.MainButton.hide(); // скрываем стандартную кнопку Telegram
 
-      // Фиксируем визуальные размеры игрового контейнера
       const container = document.getElementById('game-container');
+
+      // Функция масштабирования, чтобы контент всегда был в центре и не растягивался
       function adjustSize() {
         const scaleX = window.innerWidth / container.offsetWidth;
         const scaleY = window.innerHeight / container.offsetHeight;
@@ -82,15 +95,19 @@
         container.style.transformOrigin = 'top left';
       }
 
-      adjustSize(); // сразу при загрузке
-      window.addEventListener('resize', adjustSize); // при изменении экрана
+      // Сразу при загрузке и при изменении размера экрана
+      adjustSize();
+      window.addEventListener('resize', adjustSize);
     }
 
+    // Логика подсчета тапов
     let taps = 0;
     document.getElementById("tap").onclick = () => {
       taps++;
       document.getElementById("counter").innerText = taps;
-      tg.HapticFeedback.impactOccurred("light");
+      if (tg && tg.HapticFeedback) {
+        tg.HapticFeedback.impactOccurred("light");
+      }
     };
   </script>
 
