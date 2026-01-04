@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Tap App</title>
 
+  <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
@@ -15,11 +16,7 @@
       background: #0f0f0f;
       color: white;
       font-family: Arial, sans-serif;
-      overflow: hidden;
-      touch-action: none;
-    }
-
-    body {
+      overflow: hidden;           /* запрещаем прокрутку */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -30,7 +27,6 @@
       height: 100%;
       max-width: 500px;
       max-height: 800px;
-
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -44,22 +40,26 @@
     }
 
     #tap {
-      width: min(70vw, 320px);
-      height: min(70vw, 320px);
+      width: 60vw;
+      height: 60vw;
+      max-width: 300px;
+      max-height: 300px;
+      min-width: 220px;
+      min-height: 220px;
 
       border-radius: 50%;
       background: linear-gradient(135deg, gold, orange);
       font-size: 32px;
       border: none;
       box-shadow: 0 0 40px orange;
-
       transition: transform 0.08s ease;
       user-select: none;
       touch-action: manipulation;
+      cursor: pointer;
     }
 
     #tap:active {
-      transform: scale(0.92);
+      transform: scale(0.92); /* анимация нажатия */
     }
   </style>
 </head>
@@ -70,6 +70,7 @@
     <button id="tap">TAP</button>
   </div>
 
+  <!-- Подключаем JS -->
   <script src="game.js"></script>
 </body>
 </html>
